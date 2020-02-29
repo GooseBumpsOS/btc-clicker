@@ -107,6 +107,12 @@ function _simpleRequest($url, $sleep, $postPar = [])
 
     curl_close($ch); // Завершаем сеанс
 
+    if (strlen($tempRes) == 0){
+
+$tempRes = "<!DOCTYPE html><html><body></body></html>"; // иногда приходит заблоченные сайты и чтобы не оборачивать все в try catch, возвращаем минимаьлный набор
+
+}
+
     return $tempRes;
 
 }
