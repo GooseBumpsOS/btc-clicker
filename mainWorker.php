@@ -42,7 +42,7 @@ for (; ;) { //inf loop
             $MadelineProto->messages->sendMessage(['peer' => $channel, 'message' => '🖥 Visit sites']);
 
         }
-    } while (!array_key_exists('reply_markup', $resData['messages'][0]));
+    } while (!isset($resData['messages'][0]['reply_markup']['rows'][0]['buttons'][0]['url']));
 
     $url = $resData['messages'][0]['reply_markup']['rows'][0]['buttons'][0]['url'];
     sendRequest($url, 0);//отправлям для того чтобы получить время которое нужно оставиться на сайте
