@@ -10,56 +10,67 @@ $MadelineProto = new \danog\MadelineProto\API('session.madeline');
 $MadelineProto->start();
 
 /*Settings vars*/
-$channel = "@BitcoinClick_bot";
+$channels = ["@BitcoinClick_bot", "@Litecoin_click_bot", "@BCH_clickbot"];
 $limit = 10;
 $offset_id = 0;
 /*end of settings*/
 
-$MadelineProto->messages->sendMessage(['peer' => $channel, 'message' => '🖥 Visit sites']);
-echo "\n\n\n\e[0;32mSend msg\n";
+for (; ;)
+    foreach ($channels as $channel)
+        loop($MadelineProto, $channel);
 
-$countOfReq = 0;
-for (; ;) { //inf loop
+function loop($MadelineProto, $channel, $limit = 10, $offset_id = 0)
+{
 
-    do {
-        $countOfReq++;
+    $MadelineProto->messages->sendMessage(['peer' => $channel, 'message' => '🖥 Visit sites']);
+    echo "\n\n\n\e[0;32mSend msg\n";
 
-        echo "\e[1;33mWait for new link\n";
+    $countOfReq = 0;
+    for (; ;) { //inf loop
 
-        sleep(2);
+        do {
+            $countOfReq++;
 
-        $resData = $MadelineProto->messages->getHistory(['peer' => $channel, 'offset_id' => $offset_id, 'offset_date' => 0, 'add_offset' => 0, 'limit' => $limit, 'max_id' => 0, 'min_id' => 0, 'hash' => 0]);
+            echo "\e[1;33mWait for new link\n";
 
-        if ($countOfReq == 4 || $countOfReq == 8) {
-            $MadelineProto->messages->sendMessage(['peer' => $channel, 'message' => '🖥 Visit sites']);
-            sleep(1);
+            sleep(2);
+
+            $resData = $MadelineProto->messages->getHistory(['peer' => $channel, 'offset_id' => $offset_id, 'offset_date' => 0, 'add_offset' => 0, 'limit' => $limit, 'max_id' => 0, 'min_id' => 0, 'hash' => 0]);
+
+            if ($countOfReq == 4 || $countOfReq == 8) {
+                $MadelineProto->messages->sendMessage(['peer' => $channel, 'message' => '🖥 Visit sites']);
+                sleep(1);
+            }
+
+            if ($countOfReq > 10) {
+                echo "Change channel\n";
+//                sleep(180);
+//                $countOfReq = 0;
+//                $MadelineProto->messages->sendMessage(['peer' => $channel, 'message' => '🖥 Visit sites']);
+                return false;
+            }
+        } while (!isset($resData['messages'][0]['reply_markup']['rows'][0]['buttons'][0]['url']));
+
+        $url = $resData['messages'][0]['reply_markup']['rows'][0]['buttons'][0]['url'];
+        sendRequest($url, 0);//отправлям для того чтобы получить время которое нужно оставиться на сайте
+        if (($time = getTime($MadelineProto, $channel)) == false) {
+
+            $MadelineProto->messages->getBotCallbackAnswer(['peer' => $channel, 'msg_id' => intval($resData['messages'][0]['id']), 'data' => $resData['messages'][0]['reply_markup']['rows'][1]['buttons']['1']['data']]);
+            echo "Skipping task";
+            continue;
+        } else {
+
+            sendRequest($url, $time);
+
         }
 
-        if ($countOfReq > 10) {
-            echo "Sleep for 3 min\n";
-            sleep(180);
-            $countOfReq = 0;
-            $MadelineProto->messages->sendMessage(['peer' => $channel, 'message' => '🖥 Visit sites']);
-
-        }
-    } while (!isset($resData['messages'][0]['reply_markup']['rows'][0]['buttons'][0]['url']));
-
-    $url = $resData['messages'][0]['reply_markup']['rows'][0]['buttons'][0]['url'];
-    sendRequest($url, 0);//отправлям для того чтобы получить время которое нужно оставиться на сайте
-    if (($time = getTime($MadelineProto)) == false) {
-
-        $MadelineProto->messages->getBotCallbackAnswer(['peer' => $channel, 'msg_id' => intval($resData['messages'][0]['id']), 'data' => $resData['messages'][0]['reply_markup']['rows'][1]['buttons']['1']['data']]);
-        continue;
-    } else {
-
-        sendRequest($url, $time);
 
     }
 
 
 }
 
-function getTime($md, $channel = "@BitcoinClick_bot", $offset_id = 0, $limit = 3)
+function getTime($md, $channel, $offset_id = 0, $limit = 3)
 {
 
     $iterCount = 0;
@@ -73,11 +84,16 @@ function getTime($md, $channel = "@BitcoinClick_bot", $offset_id = 0, $limit = 3
         echo "Wait for time var\n";
     } while (count($time) == 0 && $iterCount < 3);
 
-
     if (count($time) > 0)
         return intval(trim(substr($time[0], 0, -4)));
     else
         return false;
+
+}
+
+function withdraw(){
+
+
 
 }
 
@@ -107,11 +123,11 @@ function _simpleRequest($url, $sleep, $postPar = [])
 
     curl_close($ch); // Завершаем сеанс
 
-    if (strlen($tempRes) == 0){
+    if (strlen($tempRes) == 0) {
 
-$tempRes = "<!DOCTYPE html><html><body></body></html>"; // иногда приходит заблоченные сайты и чтобы не оборачивать все в try catch, возвращаем минимаьлный набор
+        $tempRes = "<!DOCTYPE html><html><body></body></html>"; // иногда приходит заблоченные сайты и чтобы не оборачивать все в try catch, возвращаем минимаьлный набор
 
-}
+    }
 
     return $tempRes;
 
