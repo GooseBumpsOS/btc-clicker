@@ -9,23 +9,28 @@ $options = getopt('c:a:');
 $optionsCount = count($options);
 
 if ($optionsCount == 1)
-    getBalance($MadelineProto, $options['c']) . PHP_EOL;
+//    file_put_contents('balance.txt', json_encode(getBalance($MadelineProto, $options['c'])));
+    //TODO Сделать функцию для занесения в БД
 elseif ($optionsCount == 2)
     withdraw($MadelineProto, $options['c'], $options['a']);
 else
     die('Ошибка в параметрах' . "\n");
 
-echo 'Скрипт отработал успешно' . PHP_EOL;
-
+if (!file_exists('balance.txt'))
+    echo 'Вывод произведен успешно' . PHP_EOL;
+else {
+    echo "Произошла ошибка";
+}
 
 function getBalance($MadelineProto, $channel)
 {
 
     $MadelineProto->messages->sendMessage(['peer' => $channel, 'message' => 'Balance']);
+    sleep(1);
     $msgArray = $MadelineProto->messages->getHistory(['peer' => $channel, 'offset_id' => 0, 'offset_date' => 0, 'add_offset' => 0, 'limit' => 3, 'max_id' => 0, 'min_id' => 0, 'hash' => 0]);
 
     preg_match('/[0-9.]+/m', $msgArray['messages'][0]['message'], $balance);
-    return $balance[0][0];
+    return $balance[0];
 
 }
 
