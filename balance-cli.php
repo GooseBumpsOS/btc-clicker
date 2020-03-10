@@ -1,4 +1,5 @@
 <?php
+include 'madeline.php';
 
 $MadelineProto = new \danog\MadelineProto\API('session.madeline');
 $MadelineProto->start();
@@ -8,7 +9,7 @@ $options = getopt('c:a:');
 $optionsCount = count($options);
 
 if ($optionsCount == 1)
-    getBalance($MadelineProto, $options['c']). PHP_EOL;
+    getBalance($MadelineProto, $options['c']) . PHP_EOL;
 elseif ($optionsCount == 2)
     withdraw($MadelineProto, $options['c'], $options['a']);
 else
@@ -17,7 +18,8 @@ else
 echo 'Скрипт отработал успешно' . PHP_EOL;
 
 
-function getBalance($MadelineProto, $channel){
+function getBalance($MadelineProto, $channel)
+{
 
     $MadelineProto->messages->sendMessage(['peer' => $channel, 'message' => 'Balance']);
     $msgArray = $MadelineProto->messages->getHistory(['peer' => $channel, 'offset_id' => 0, 'offset_date' => 0, 'add_offset' => 0, 'limit' => 3, 'max_id' => 0, 'min_id' => 0, 'hash' => 0]);
@@ -27,7 +29,8 @@ function getBalance($MadelineProto, $channel){
 
 }
 
-function withdraw($MadelineProto, $channel, $amount){
+function withdraw($MadelineProto, $channel, $amount)
+{
 
     $chanelToWalletFile = ["@BitcoinClick_bot" => 'btc.txt', "@Litecoin_click_bot" => 'ltc.txt', "@BCH_clickbot" => 'bch.txt'];
     $wallets = file($chanelToWalletFile[$channel]);
@@ -35,7 +38,7 @@ function withdraw($MadelineProto, $channel, $amount){
 
     $messages = ['💰💰Balance', 'Withdraw', $btcAddress, $amount, '✅ Confirm'];
 
-    foreach ($messages as $message){
+    foreach ($messages as $message) {
         $MadelineProto->messages->sendMessage(['peer' => $channel, 'message' => $message]);
         sleep(1.5);
     }
