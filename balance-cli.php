@@ -8,7 +8,7 @@ $options = getopt('f:c:a:');
 $optionsCount = count($options);
 
 if ($optionsCount == 2)
-    getBalance($MadelineProto, $options['c']);
+    getBalance($MadelineProto, $options['c']). PHP_EOL;
 elseif ($optionsCount == 3)
     getBalance($MadelineProto, $options['c'], $options['a']);
 else

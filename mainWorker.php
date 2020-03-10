@@ -44,7 +44,7 @@ function loop($MadelineProto, $channel, $limit = 10, $offset_id = 0)
 
             if ($countOfReq > 10) {
                 echo "Change channel\n";
-//                sleep(180);
+                sleep(30);
 //                $countOfReq = 0;
 //                $MadelineProto->messages->sendMessage(['peer' => $channel, 'message' => '🖥 Visit sites']);
                 return false;
