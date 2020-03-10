@@ -56,7 +56,7 @@ function loop($MadelineProto, $channel, $limit = 10, $offset_id = 0)
         if (($time = getTime($MadelineProto, $channel)) == false) {
 
             $MadelineProto->messages->getBotCallbackAnswer(['peer' => $channel, 'msg_id' => intval($resData['messages'][0]['id']), 'data' => $resData['messages'][0]['reply_markup']['rows'][1]['buttons']['1']['data']]);
-            echo "Skipping task";
+            echo "Skipping task\n";
             continue;
         } else {
 
@@ -88,12 +88,6 @@ function getTime($md, $channel, $offset_id = 0, $limit = 3)
         return intval(trim(substr($time[0], 0, -4)));
     else
         return false;
-
-}
-
-function withdraw(){
-
-
 
 }
 
