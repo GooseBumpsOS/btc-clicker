@@ -3,14 +3,14 @@
 $MadelineProto = new \danog\MadelineProto\API('session.madeline');
 $MadelineProto->start();
 
-//function : channel : amount
-$options = getopt('f:c:a:');
+//channel : amount
+$options = getopt('c:a:');
 $optionsCount = count($options);
 
-if ($optionsCount == 2)
+if ($optionsCount == 1)
     getBalance($MadelineProto, $options['c']). PHP_EOL;
-elseif ($optionsCount == 3)
-    getBalance($MadelineProto, $options['c'], $options['a']);
+elseif ($optionsCount == 2)
+    withdraw($MadelineProto, $options['c'], $options['a']);
 else
     die('Ошибка в параметрах' . "\n");
 
@@ -23,7 +23,7 @@ function getBalance($MadelineProto, $channel){
     $msgArray = $MadelineProto->messages->getHistory(['peer' => $channel, 'offset_id' => 0, 'offset_date' => 0, 'add_offset' => 0, 'limit' => 3, 'max_id' => 0, 'min_id' => 0, 'hash' => 0]);
 
     preg_match('/[0-9.]+/m', $msgArray['messages'][0]['message'], $balance);
-    return ['BTC' => $balance[0][0], 'satoshi' => $balance[0][1]];
+    return $balance[0][0];
 
 }
 
