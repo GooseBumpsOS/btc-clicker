@@ -1,12 +1,22 @@
 <?php
+exec('nohup php /home/georgy/MDInit/overseer.php '.getmypid().' > /dev/null 2>&1 &');
+$proxy = system('php /home/georgy/MDInit/proxy.php');
 
 if (!file_exists('madeline.php')) {
     copy('https://phar.madelineproto.xyz/madeline.php', 'madeline.php');
 }
 include 'madeline.php';
 
+use danog\MadelineProto\Stream\Proxy\HttpProxy;
+
+$settings['connection_settings']['all']['proxy'] = HttpProxy::getName();
+$settings['connection_settings']['all']['proxy_extra'] = [
+    'address'  => explode(':',$proxy)[0],
+    'port'     => explode(':',$proxy)[1],
+];
+
 libxml_use_internal_errors(true);
-$MadelineProto = new \danog\MadelineProto\API('session.madeline');
+$MadelineProto = new \danog\MadelineProto\API('session.madeline', $settings);
 $MadelineProto->start();
 
 /*Settings vars*/
