@@ -21,7 +21,7 @@ else {
     echo "Произошла ошибка";
 }
 
-function getBalance($MadelineProto, $channel)
+function getBalance($MadelineProto)
 {
     $resArr = [];
     $channels = ["@BitcoinClick_bot", "@Litecoin_click_bot", "@BCH_clickbot"];
