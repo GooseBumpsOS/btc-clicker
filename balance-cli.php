@@ -9,7 +9,7 @@ $options = getopt('c:a:');
 $optionsCount = count($options);
 
 if ($optionsCount == 1)
-    file_put_contents('balance.txt', json_encode(getBalance($MadelineProto, $options['c'])));
+    file_put_contents('balance.txt', json_encode(getBalance($MadelineProto)));
 elseif ($optionsCount == 2)
     withdraw($MadelineProto, $options['c'], $options['a']);
 else
