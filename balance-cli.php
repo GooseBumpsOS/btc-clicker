@@ -9,8 +9,7 @@ $options = getopt('c:a:');
 $optionsCount = count($options);
 
 if ($optionsCount == 1)
-//    file_put_contents('balance.txt', json_encode(getBalance($MadelineProto, $options['c'])));
-    //TODO Сделать функцию для занесения в БД
+    file_put_contents('balance.txt', json_encode(getBalance($MadelineProto, $options['c'])));
 elseif ($optionsCount == 2)
     withdraw($MadelineProto, $options['c'], $options['a']);
 else
@@ -24,13 +23,20 @@ else {
 
 function getBalance($MadelineProto, $channel)
 {
+    $resArr = [];
+    $channels = ["@BitcoinClick_bot", "@Litecoin_click_bot", "@BCH_clickbot"];
 
-    $MadelineProto->messages->sendMessage(['peer' => $channel, 'message' => 'Balance']);
-    sleep(1);
-    $msgArray = $MadelineProto->messages->getHistory(['peer' => $channel, 'offset_id' => 0, 'offset_date' => 0, 'add_offset' => 0, 'limit' => 3, 'max_id' => 0, 'min_id' => 0, 'hash' => 0]);
+    foreach ($channels as $channel){
+        $MadelineProto->messages->sendMessage(['peer' => $channel, 'message' => 'Balance']);
+        sleep(1);
+        $msgArray = $MadelineProto->messages->getHistory(['peer' => $channel, 'offset_id' => 0, 'offset_date' => 0, 'add_offset' => 0, 'limit' => 3, 'max_id' => 0, 'min_id' => 0, 'hash' => 0]);
 
-    preg_match('/[0-9.]+/m', $msgArray['messages'][0]['message'], $balance);
-    return $balance[0];
+        preg_match('/[0-9.]+/m', $msgArray['messages'][0]['message'], $balance);
+        $resArr[$channel] = $balance[0];
+    }
+
+    return $resArr;
+
 
 }
 
