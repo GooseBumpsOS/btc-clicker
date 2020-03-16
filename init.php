@@ -10,4 +10,4 @@ $MadelineProto->start();
 
 $MadelineProto->messages->sendMessage(['peer' => '-327595262', 'message' => 'Новый скрипт запущен']);
 
-system('nohup php -f mainWorker.php > /dev/null 2>&1 &');
+system('nohup php -f mainWorker.php > log.txt 2>/dev/null &');
