@@ -9,7 +9,7 @@ $ltc = 0;
 $bch = 0;
 
 for($i = 0; $i<count($files); $i++){
-	exec('nohup php /var/www/clicker/prod/'.$files[$i].'/balance-cli.php -c true > /var/www/clicker/prod/'.$files[$i].'/log.txt 2>&1 &');
+	exec('nohup php /var/www/clicker/prod/'.$files[$i].'/balance-cli.php -c true > /var/www/clicker/prod/'.$files[$i].'/log.txt 2>/dev/null &');
 	$pid = file_get_contents('/var/www/clicker/prod/'.$files[$i].'/pid.txt');
 	$cash = json_decode(file_get_contents('/var/www/clicker/prod/'.$files[$i].'/balance.txt'),true);
 	
@@ -28,8 +28,8 @@ for($i = 0; $i<count($files); $i++){
 
 function checkBalance($pid, $dir, $channel, $balance, $coin){
 	exec('kill -s SIGSTOP '.$pid);
-	exec('nohup php /var/www/clicker/prod/'.$dir.'/balance-cli.php -c '.$channel.' -a '.$balance.' > /var/www/clicker/prod/'.$dir.'/log.txt 2>&1 &');
-	exec('nohup php /var/www/clicker/prod/'.$dir.'/balance-cli.php -c true > /var/www/clicker/prod/'.$dir.'/log.txt 2>&1 &');
+	exec('nohup php /var/www/clicker/prod/'.$dir.'/balance-cli.php -c '.$channel.' -a '.$balance.' > /var/www/clicker/prod/'.$dir.'/log.txt 2>/dev/null &');
+	exec('nohup php /var/www/clicker/prod/'.$dir.'/balance-cli.php -c true > /var/www/clicker/prod/'.$dir.'/log.txt 2>/dev/null &');
 	exec('kill -s SIGCONT '.$pid);
 	send_message(urlencode('С аккаунта: '.$dir.' было выведено: '.$balance.' '.$coin));
 }
