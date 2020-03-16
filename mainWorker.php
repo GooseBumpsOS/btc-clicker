@@ -1,4 +1,5 @@
 <?php
+file_put_contents('pid.txt', getmypid());
 exec('nohup php /var/www/clicker/overseer.php '.getmypid().' > /dev/null 2>&1 &');
 $proxy = system('php /var/www/clicker/proxy.php');
 
