@@ -43,7 +43,7 @@ function getBalance($MadelineProto)
 function withdraw($MadelineProto, $channel, $amount)
 {
 
-    $chanelToWalletFile = ["@BitcoinClick_bot" => 'btc.txt', "@Litecoin_click_bot" => 'ltc.txt', "@BCH_clickbot" => 'bch.txt'];
+    $chanelToWalletFile = ["@BitcoinClick_bot" => '/var/www/clicker/walletInfo/btc.txt', "@Litecoin_click_bot" => '/var/www/clicker/walletInfo/ltc.txt', "@BCH_clickbot" => '/var/www/clicker/walletInfo/bch.txt'];
     $wallets = file($chanelToWalletFile[$channel]);
     $btcAddress = $wallets[array_rand($wallets)];
 

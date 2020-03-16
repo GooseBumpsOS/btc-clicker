@@ -1,6 +1,6 @@
 <?php
-exec('nohup php /home/georgy/MDInit/overseer.php '.getmypid().' > /dev/null 2>&1 &');
-$proxy = system('php /home/georgy/MDInit/proxy.php');
+exec('nohup php /var/www/clicker/overseer.php '.getmypid().' > /dev/null 2>&1 &');
+$proxy = system('php /var/www/clicker/proxy.php');
 
 if (!file_exists('madeline.php')) {
     copy('https://phar.madelineproto.xyz/madeline.php', 'madeline.php');
