@@ -4,8 +4,9 @@ $pid = $argv[1];
 
 while (1) {
     if (!file_exists("/proc/{$pid}")) {
-        //exec('nohup php update.php > /dev/null 2>&1 &');
+	$cwd = getcwd();
         send_message(urlencode('Процесс в папке ' . getcwd() . ' упал'));
+        exec("nohup php $cwd/init.php > log.txt 2>/dev/null &");
         die();
     }
     sleep(20);

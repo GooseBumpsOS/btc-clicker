@@ -1,5 +1,5 @@
 <?php 
-$dir = '/var/www/clicker';
+$dir = '/var/www/clicker/prod/';
 $files = scandir($dir);
 $removeDirs = array(".","..");
 $files = array_diff($files, $removeDirs);
@@ -8,11 +8,12 @@ $btc = 0;
 $ltc = 0;
 $bch = 0;
 
-for($i = 0; $i<count($files); $i++){
+foreach($files as $i => $item){
 	$cash = json_decode(file_get_contents('/var/www/clicker/prod/'.$files[$i].'/balance.txt'),true);
-	$btc += $cash[0]['@BitcoinClick_bot'];
-	$ltc += $cash[0]['@Litecoin_click_bot'];
-	$bch += $cash[0]['@BCH_clickbot'];
+	$btc = $btc+$cash['@BitcoinClick_bot'];
+	$ltc += $cash['@Litecoin_click_bot'];
+	$bch += $cash['@BCH_clickbot'];
+echo $btc.'/'.$ltc.'/'.$bch.PHP_EOL;
 }
 
 send_message(urlencode('BTC sum: '.$btc.', LTC sum: '.$ltc.', BCH sum: '.$bch));

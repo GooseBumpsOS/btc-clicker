@@ -8,9 +8,9 @@ if (!file_exists('madeline.php')) {
 }
 include 'madeline.php';
 
-use danog\MadelineProto\Stream\Proxy\HttpProxy;
+use danog\MadelineProto\Stream\Proxy\SocksProxy;
 
-$settings['connection_settings']['all']['proxy'] = HttpProxy::getName();
+$settings['connection_settings']['all']['proxy'] = SocksProxy::getName();
 $settings['connection_settings']['all']['proxy_extra'] = [
     'address'  => explode(':',$proxy)[0],
     'port'     => explode(':',$proxy)[1],
@@ -163,3 +163,4 @@ function sendRequest($url, $sleep = 0)
 
 
 }
+
