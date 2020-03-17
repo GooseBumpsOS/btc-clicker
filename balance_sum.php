@@ -13,8 +13,12 @@ foreach($files as $i => $item){
 	$btc = $btc+$cash['@BitcoinClick_bot'];
 	$ltc += $cash['@Litecoin_click_bot'];
 	$bch += $cash['@BCH_clickbot'];
-echo $btc.'/'.$ltc.'/'.$bch.PHP_EOL;
+//echo $btc.'/'.$ltc.'/'.$bch.PHP_EOL;
 }
+
+
+$btc = rtrim(number_format($btc, 10, '.', ''), '0');
+$bch = rtrim(number_format($bch, 10, '.', ''), '0');
 
 send_message(urlencode('BTC sum: '.$btc.', LTC sum: '.$ltc.', BCH sum: '.$bch));
 
